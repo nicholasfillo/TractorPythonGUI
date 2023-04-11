@@ -7,19 +7,6 @@ from bleak import BleakClient
 address = "a0:6c:65:cf:7f:8f"
 MODEL_NBR_UUID = "0000FFE1-0000-1000-8000-00805F9B34FB"
 
-async def main(address):
-    client = BleakClient(address)
-    try:
-        await client.connect()
-        model_number = await client.read_gatt_char(MODEL_NBR_UUID)
-        print("Model Number: {0}".format("".join(map(chr, model_number))))
-    except Exception as e:
-        print(e)
-    finally:
-        await client.disconnect()
-
-asyncio.run(main(address))
-
 #Set screen width and Height
 SCREEN_HEIGHT = 750
 SCREEN_WIDTH = 1500
@@ -73,32 +60,50 @@ elapsed_time_button = Button(1150, 475, ELAPSED_TIME_BUTTON, 1.0)
 distance_traveled_button = Button(100, 475, DISTANCE_TRAVELED_BUTTON, 1.0)
 speed_button = Button(100, 100, SPEED_BUTTON, 1.0)
 
-run = True
-while run:
-    screen.fill((229, 229, 229)) #Used to achieve the soft white background
+async def main(address):
+    client = BleakClient(address)
+    try:
+        await client.connect()
+        model_number = await client.read_gatt_char(MODEL_NBR_UUID)
+        print("Model Number: {0}".format("".join(map(chr, model_number))))
+        #async with BleakClient(address) as client:
+        run = True
+        while run:
+            screen.fill((229, 229, 229)) #Used to achieve the soft white background
 
-    #draws all the buttons on the screen
-    if start_button.draw() == True:
-        print("START")
-        start = '1'
-        bytes_start = bytes(start, "UTF-8")
-        BleakClient.write_gatt_char(MODEL_NBR_UUID, bytes_start)
+            #draws all the buttons on the screen
+            if start_button.draw() == True:
+                print("START")
+                start = '1'
+                bytes_start = bytes(start, 'ascii', errors = 'ignore')
+                print('Byte converstion:', bytes_start)
+                await client.write_gatt_char(MODEL_NBR_UUID, bytes(start, 'ascii', errors = 'ignore'), response = False)
 
-    if stop_button.draw() == True:
-        print("STOP")
+            if stop_button.draw() == True:
+                print("STOP")
+                stop = '0'
+                bytes_stop = bytes(stop, 'ascii', errors = 'ignore')
+                print('Byte converstion:', bytes_stop)
+                await client.write_gatt_char(MODEL_NBR_UUID, bytes(stop, 'ascii', errors = 'ignore'), response = False)
 
-    trip_report_button.draw()
-    black_tape_count_button.draw()
-    elapsed_time_button.draw()
-    distance_traveled_button.draw()
-    speed_button.draw()
+            trip_report_button.draw()
+            black_tape_count_button.draw()
+            elapsed_time_button.draw()
+            distance_traveled_button.draw()
+            speed_button.draw()
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
 
-    pygame.display.update() #Updates the events from the user
+            pygame.display.update() #Updates the events from the user
+        pygame.quit()  
+    except Exception as e:
+        print(e)
+    finally:
+        await client.disconnect()
 
-pygame.quit()    
+
+asyncio.run(main(address))
 
 
