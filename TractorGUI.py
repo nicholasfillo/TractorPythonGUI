@@ -80,6 +80,9 @@ while run:
     #draws all the buttons on the screen
     if start_button.draw() == True:
         print("START")
+        start = '1'
+        bytes_start = bytes(start, "UTF-8")
+        BleakClient.write_gatt_char(MODEL_NBR_UUID, bytes_start)
 
     if stop_button.draw() == True:
         print("STOP")
