@@ -5,10 +5,7 @@ from bleak import BleakClient
 
 #Bluetooth module address and UUID
 address = "a0:6c:65:cf:7f:8f"
-#MODEL_NBR_UUID = "D1C9A85C-F156-7167-C57B-C65121704205"
-#MODEL_NBR_UUID = "1A797938-14C0-E3CE-BA59-29761941EE17"
 MODEL_NBR_UUID = "0000FFE1-0000-1000-8000-00805F9B34FB"
-
 
 async def main(address):
     client = BleakClient(address)
@@ -100,4 +97,5 @@ while run:
     pygame.display.update() #Updates the events from the user
 
 pygame.quit()    
+
 
