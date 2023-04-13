@@ -71,6 +71,9 @@ async def main(address):
         while run:
             screen.fill((229, 229, 229)) #Used to achieve the soft white background
 
+            if black_tape_count_button.draw() == False:
+                black_tape_count = await client.read_gatt_char()
+
             #draws all the buttons on the screen
             if start_button.draw() == True:
                 print("START")
