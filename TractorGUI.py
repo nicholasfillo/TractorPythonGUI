@@ -122,8 +122,8 @@ async def main(address):
 
 
 asyncio.run(main(address))
-'''
 
+'''
 import pygame
 import asyncio
 import uuid
@@ -137,6 +137,7 @@ SERVICE_NBR_UUID = "0000FFE0-0000-1000-8000-00805F9B34FB"
 #Set screen width and Height
 SCREEN_HEIGHT = 750
 SCREEN_WIDTH = 1500
+
 
 #Initialize the screen and set a screen caption
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -192,13 +193,14 @@ distance_traveled_button = Button(100, 475, DISTANCE_TRAVELED_BUTTON, 1.0)
 speed_button = Button(100, 100, SPEED_BUTTON, 1.0)
 blank = Button(665, 550, BLANK, 1.0)
 
-black_tape_count = 'a'
+screen.fill((229, 229, 229))
+global_black_tape_count = '999'
 
 async def main(address):
     client = BleakClient(address)
-
     def callback(sender: client, data: bytearray):
         black_tape_count = data.decode()
+        if ()
         print("hello")
         print(black_tape_count)
         textTBD = textfont.render(black_tape_count, 1, (0, 0, 0))
@@ -207,16 +209,22 @@ async def main(address):
         
     try:
         await client.connect()
-        await client.start_notify(MODEL_NBR_UUID, callback)
+        #await client.start_notify(MODEL_NBR_UUID, callback)
         model_number = await client.read_gatt_char(MODEL_NBR_UUID)
         print("Model Number: {0}".format("".join(map(chr, model_number))))
         #async with BleakClient(address) as client:
         run = True
         while run:
-            screen.fill((229, 229, 229)) #Used to achieve the soft white background
+            #Used to achieve the soft white background
 
             #textTBD = textfont.render(black_tape_count, 1, (0, 0, 0))
+<<<<<<< Updated upstream
             #screen.blit(textTBD, (300, 700))
+=======
+            #creen.blit(textTBD, (400, 500))
+
+            await client.start_notify(MODEL_NBR_UUID, callback)
+>>>>>>> Stashed changes
 
             #draws all the buttons on the screen
             if start_button.draw() == True:
