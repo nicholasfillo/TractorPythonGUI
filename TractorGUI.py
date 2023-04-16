@@ -6,6 +6,7 @@ from bleak import BleakClient
 #Bluetooth module address and UUID
 address = "a0:6c:65:cf:7f:8f"
 MODEL_NBR_UUID = "0000FFE1-0000-1000-8000-00805F9B34FB"
+SERVICE_NBR_UUID = "0000FFE0-0000-1000-8000-00805F9B34FB"
 
 #Set screen width and Height
 SCREEN_HEIGHT = 750
@@ -60,10 +61,19 @@ elapsed_time_button = Button(1150, 475, ELAPSED_TIME_BUTTON, 1.0)
 distance_traveled_button = Button(100, 475, DISTANCE_TRAVELED_BUTTON, 1.0)
 speed_button = Button(100, 100, SPEED_BUTTON, 1.0)
 
+
+
 async def main(address):
     client = BleakClient(address)
+
+    def callback(sender: client, data: bytearray):
+        black_tape_count = data.decode()
+        print("hello")
+        print(black_tape_count)
+        
     try:
         await client.connect()
+        await client.start_notify(MODEL_NBR_UUID, callback)
         model_number = await client.read_gatt_char(MODEL_NBR_UUID)
         print("Model Number: {0}".format("".join(map(chr, model_number))))
         #async with BleakClient(address) as client:
@@ -71,8 +81,10 @@ async def main(address):
         while run:
             screen.fill((229, 229, 229)) #Used to achieve the soft white background
 
-            if black_tape_count_button.draw() == False:
-                black_tape_count = await client.read_gatt_char()
+            #if black_tape_count_button.draw() == False:
+                #await client.start_notify(MODEL_NBR_UUID, callback)
+                #black_tape_count = await client.read_gatt_char(MODEL_NBR_UUID)
+                #print(black_tape_count.decode())
 
             #draws all the buttons on the screen
             if start_button.draw() == True:
