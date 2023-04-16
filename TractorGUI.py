@@ -1,4 +1,4 @@
-import pygame
+'''import pygame
 import asyncio
 import uuid
 from bleak import BleakClient
@@ -153,6 +153,7 @@ BLACK_TAPE_COUNT_BUTTON = pygame.image.load('Black_Tape_Count.PNG')
 ELAPSED_TIME_BUTTON = pygame.image.load('Elapsed_Time.PNG')
 DISTANCE_TRAVELED_BUTTON = pygame.image.load('Distance_Traveled.PNG')
 SPEED_BUTTON = pygame.image.load('Speed.PNG')
+BLANK = pygame.image.load("Blank.PNG")
 
 class Button():
     #This function is similar to a constructor
@@ -189,6 +190,7 @@ black_tape_count_button = Button(613.5, 475, BLACK_TAPE_COUNT_BUTTON, 1.0)
 elapsed_time_button = Button(1150, 475, ELAPSED_TIME_BUTTON, 1.0)
 distance_traveled_button = Button(100, 475, DISTANCE_TRAVELED_BUTTON, 1.0)
 speed_button = Button(100, 100, SPEED_BUTTON, 1.0)
+blank = Button(665, 550, BLANK, 1.0)
 
 black_tape_count = 'a'
 
@@ -199,6 +201,8 @@ async def main(address):
         black_tape_count = data.decode()
         print("hello")
         print(black_tape_count)
+        textTBD = textfont.render(black_tape_count, 1, (0, 0, 0))
+        screen.blit(textTBD, (665, 550))
     
         
     try:
@@ -211,8 +215,8 @@ async def main(address):
         while run:
             screen.fill((229, 229, 229)) #Used to achieve the soft white background
 
-            textTBD = textfont.render(black_tape_count, 1, (0, 0, 0))
-            screen.blit(textTBD, (300, 700))
+            #textTBD = textfont.render(black_tape_count, 1, (0, 0, 0))
+            #screen.blit(textTBD, (300, 700))
 
             #draws all the buttons on the screen
             if start_button.draw() == True:
@@ -234,6 +238,7 @@ async def main(address):
             elapsed_time_button.draw()
             distance_traveled_button.draw()
             speed_button.draw()
+            blank.draw()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
